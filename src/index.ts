@@ -2993,7 +2993,11 @@ var flatpickr = function (
 ) {
   if (typeof selector === "string") {
     return _flatpickr(document.querySelectorAll(selector), config);
-  } else if (selector instanceof Node) {
+  } else if (
+    selector instanceof Node ||
+    (window.top &&
+      selector instanceof (window.top as Window & { Node: typeof Node }).Node)
+  ) {
     return _flatpickr([selector], config);
   } else {
     return _flatpickr(selector, config);
