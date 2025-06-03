@@ -22,6 +22,7 @@ import {
   findParent,
   toggleClass,
   getEventTarget,
+  doc as document,
 } from "./utils/dom";
 import {
   compareDates,
@@ -445,9 +446,9 @@ function FlatpickrInstance(
       bind(window, "resize", debouncedResize);
 
     if (window.ontouchstart !== undefined)
-      bind(window.document, "touchstart", documentClick);
-    else bind(window.document, "mousedown", documentClick);
-    bind(window.document, "focus", documentClick, { capture: true });
+      bind(document, "touchstart", documentClick);
+    else bind(document, "mousedown", documentClick);
+    bind(document, "focus", documentClick, { capture: true });
 
     if (self.config.clickOpens === true) {
       bind(self._input, "focus", self.open);
@@ -572,7 +573,7 @@ function FlatpickrInstance(
   }
 
   function build() {
-    const fragment = window.document.createDocumentFragment();
+    const fragment = document.createDocumentFragment();
     self.calendarContainer = createElement<HTMLDivElement>(
       "div",
       "flatpickr-calendar"
@@ -672,7 +673,7 @@ function FlatpickrInstance(
     if (!self.config.static && !self.config.inline)
       (self.config.appendTo !== undefined
         ? self.config.appendTo
-        : window.document.body
+        : document.body
       ).appendChild(self.calendarContainer);
   }
 
@@ -854,7 +855,7 @@ function FlatpickrInstance(
     );
 
     const daysInMonth = self.utils.getDaysInMonth(month, year),
-      days = window.document.createDocumentFragment(),
+      days = document.createDocumentFragment(),
       isMultiMonth = self.config.showMonths > 1,
       prevMonthDayClass = isMultiMonth ? "prevMonthDay hidden" : "prevMonthDay",
       nextMonthDayClass = isMultiMonth ? "nextMonthDay hidden" : "nextMonthDay";
@@ -991,7 +992,7 @@ function FlatpickrInstance(
 
   function buildMonth() {
     const container = createElement("div", "flatpickr-month");
-    const monthNavFragment = window.document.createDocumentFragment();
+    const monthNavFragment = document.createDocumentFragment();
 
     let monthElement;
 
@@ -2234,10 +2235,9 @@ function FlatpickrInstance(
     toggleClass(self.calendarContainer, "arrowRight", isRight);
 
     const right =
-      window.document.body.offsetWidth -
-      (window.pageXOffset + inputBounds.right);
-    const rightMost = left + calendarWidth > window.document.body.offsetWidth;
-    const centerMost = right + calendarWidth > window.document.body.offsetWidth;
+      document.body.offsetWidth - (window.pageXOffset + inputBounds.right);
+    const rightMost = left + calendarWidth > document.body.offsetWidth;
+    const centerMost = right + calendarWidth > document.body.offsetWidth;
 
     toggleClass(self.calendarContainer, "rightMost", rightMost);
 
@@ -2255,7 +2255,7 @@ function FlatpickrInstance(
       const doc = getDocumentStyleSheet() as CSSStyleSheet;
       // some testing environments don't have css support
       if (doc === undefined) return;
-      const bodyWidth = window.document.body.offsetWidth;
+      const bodyWidth = document.body.offsetWidth;
       const centerLeft = Math.max(0, bodyWidth / 2 - calendarWidth / 2);
       const centerBefore = ".flatpickr-calendar.centerMost:before";
       const centerAfter = ".flatpickr-calendar.centerMost:after";
@@ -2992,7 +2992,7 @@ var flatpickr = function (
   config?: Options
 ) {
   if (typeof selector === "string") {
-    return _flatpickr(window.document.querySelectorAll(selector), config);
+    return _flatpickr(document.querySelectorAll(selector), config);
   } else if (selector instanceof Node) {
     return _flatpickr([selector], config);
   } else {

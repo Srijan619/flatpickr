@@ -7,12 +7,14 @@ export function toggleClass(
   elem.classList.remove(className);
 }
 
+export const doc: Document = window.top ? window.top.document : window.document;
+
 export function createElement<T extends HTMLElement>(
   tag: keyof HTMLElementTagNameMap,
   className: string,
   content?: string
 ): T {
-  const e = window.document.createElement(tag) as T;
+  const e = doc.createElement(tag) as T;
   className = className || "";
   content = content || "";
 
