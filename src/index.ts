@@ -2936,9 +2936,16 @@ function _flatpickr(
   config?: Options
 ): Instance | Instance[] {
   // static list
-  const nodes = Array.prototype.slice
-    .call(nodeList)
-    .filter((x) => x instanceof HTMLElement) as HTMLElement[];
+  const nodes = Array.prototype.slice.call(nodeList).filter((x) => {
+    // Safe check for the iframe context and access to HTMLElement
+    return (
+      x instanceof HTMLElement ||
+      (window.top &&
+        x instanceof
+          (window.top as Window & { HTMLElement: typeof HTMLElement })
+            .HTMLElement)
+    );
+  }) as HTMLElement[];
 
   const instances: Instance[] = [];
   for (let i = 0; i < nodes.length; i++) {
