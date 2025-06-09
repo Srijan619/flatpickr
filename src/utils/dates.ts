@@ -17,16 +17,12 @@ export interface FormatterArgs {
 
 // 🔹 Safe check for cross-context Date instances
 export const isInstanceOfDate = (date: any): date is Date => {
-  if (
-    typeof window !== "undefined" &&
-    typeof window.top !== "undefined" &&
-    window.top
-  ) {
-    const topWindow = window.top as any;
-    return date instanceof topWindow.Date;
-  } else {
-    return date instanceof Date;
-  }
+  return (
+    typeof date === "object" &&
+    Object.prototype.toString.call(date) === "[object Date]" &&
+    typeof date.getTime === "function" &&
+    !isNaN(date.getTime())
+  );
 };
 
 export const createDateFormatter = ({
