@@ -17,9 +17,16 @@ export interface FormatterArgs {
 
 // 🔹 Safe check for cross-context Date instances
 export const isInstanceOfDate = (date: any): date is Date => {
-  return typeof window !== "undefined" && window.top
-    ? date instanceof window.Date
-    : date instanceof Date;
+  if (
+    typeof window !== "undefined" &&
+    typeof window.top !== "undefined" &&
+    window.top
+  ) {
+    const topWindow = window.top as any;
+    return date instanceof topWindow.Date;
+  } else {
+    return date instanceof Date;
+  }
 };
 
 export const createDateFormatter = ({
