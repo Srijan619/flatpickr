@@ -69,7 +69,7 @@ export const createDateParser = ({ config = defaults, l10n = english }) => (
   let parsedDate: Date | undefined;
   const dateOrig = date;
 
-  if (isInstanceOfDate(date)) parsedDate = new Date(date.getTime());
+  if (date instanceof Date) parsedDate = new Date(date.getTime());
   else if (
     typeof date !== "string" &&
     date.toFixed !== undefined // timestamp
